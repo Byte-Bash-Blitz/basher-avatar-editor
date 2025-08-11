@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DiceBear Avatar Editor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom animations and utilities for Tailwind */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .loading {
+            animation: spin 1s linear infinite;
+        }
+        
+        /* Color picker container styling */
+        .color-picker-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans leading-relaxed">
+    <header class="bg-white border-b border-slate-200 px-8 py-4 flex justify-between items-center sticky top-0 z-50 shadow-sm">
+        <h1 class="text-2xl font-bold text-slate-900">🎨 Basher Avatar Editor</h1>
+        <div class="flex gap-4">
+            <button onclick="randomizeAvatar()" class="px-4 py-2 bg-slate-100 text-slate-700 border border-slate-200 rounded-lg text-sm font-medium hover:bg-slate-200 transition-all flex items-center gap-2">
+                🎲 Random
+            </button>
+            <button onclick="downloadAvatar()" class="px-4 py-2 bg-blue-500 text-white rounded-lg text-sm font-medium hover:bg-blue-600 transition-all flex items-center gap-2">
+                💾 Download
+            </button>
+        </div>
+    </header>
+    
+    <div class="grid lg:grid-cols-[400px_1fr] h-[calc(100vh-73px)]">
+        <aside class="bg-white border-r border-slate-200 overflow-y-auto h-[calc(100vh-73px)] lg:h-auto">
+            <!-- Avatar Style Selection -->
+            <div class="border-b border-slate-100 p-6">
+                <h3 class="text-sm font-semibold text-gray-600 mb-4 uppercase tracking-wide">Avatar Style</h3>
+                <div class="flex gap-2 mb-4 flex-wrap" id="styleSelector">
+                    <div class="px-4 py-2 border border-slate-200 rounded-lg cursor-pointer text-sm transition-all bg-blue-500 text-white border-blue-500" data-style="lorelei">Lorelei</div>
+
+                </div>
+            </div>
+            
+            <!-- Basic Settings -->
+            <div class="border-b border-slate-100 p-6">
+                <h3 class="text-sm font-semibold text-gray-600 mb-4 uppercase tracking-wide">Basic Settings</h3>
+                <div class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-2" for="seedInput">Seed</label>
+                        <input type="text" id="seedInput" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-500 focus:ring-3 focus:ring-blue-100" value="custom-avatar" placeholder="Enter seed">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-2" for="sizeInput">Size</label>
+                        <input type="range" id="sizeInput" class="w-full my-2" min="50" max="500" value="200">
+                        <span class="inline-block bg-slate-100 px-2 py-1 rounded text-xs font-medium text-slate-600 ml-2" id="sizeValue">200px</span>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-2" for="scaleInput">Scale</label>
+                        <input type="range" id="scaleInput" class="w-full my-2" min="50" max="200" value="100">
+                        <span class="inline-block bg-slate-100 px-2 py-1 rounded text-xs font-medium text-slate-600 ml-2" id="scaleValue">100%</span>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-2" for="rotateInput">Rotate</label>
+                        <input type="range" id="rotateInput" class="w-full my-2" min="0" max="360" value="0">
+                        <span class="inline-block bg-slate-100 px-2 py-1 rounded text-xs font-medium text-slate-600 ml-2" id="rotateValue">0°</span>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-2" for="radiusInput">Border Radius</label>
+                        <input type="range" id="radiusInput" class="w-full my-2" min="0" max="50" value="0">
+                        <span class="inline-block bg-slate-100 px-2 py-1 rounded text-xs font-medium text-slate-600 ml-2" id="radiusValue">0%</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Background -->
+            <div class="border-b border-slate-100 p-6">
+                <h3 class="text-sm font-semibold text-gray-600 mb-4 uppercase tracking-wide">Background</h3>
+                <div class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-2">Background Type</label>
+                        <select id="backgroundType" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-500 focus:ring-3 focus:ring-blue-100">
+                            <option value="solid">Solid</option>
+                            <option value="gradientLinear">Gradient</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-3">Background Colors</label>
+                        <div class="space-y-1" id="backgroundColors">
+                            <!-- Colors will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Hair -->
+            <div class="border-b border-slate-100 p-6">
+                <h3 class="text-sm font-semibold text-gray-600 mb-4 uppercase tracking-wide">Hair</h3>
+                <div class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-2">Hair Style</label>
+                        <div id="hairStyles">
+                            <!-- Hair styles will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-3">Hair Colors</label>
+                        <div class="space-y-1" id="hairColors">
+                            <!-- Hair colors will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-2">Hair Accessories</label>
+                        <div id="hairAccessoriesStyles">
+                            <!-- Hair accessories will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-2" for="hairAccessoriesProbability">Hair Accessories Probability</label>
+                        <input type="range" id="hairAccessoriesProbability" class="w-full my-2" min="0" max="100" value="5">
+                        <span class="inline-block bg-slate-100 px-2 py-1 rounded text-xs font-medium text-slate-600 ml-2" id="hairAccessoriesValue">5%</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Facial Features -->
+            <div class="border-b border-slate-100 p-6">
+                <h3 class="text-sm font-semibold text-gray-600 mb-4 uppercase tracking-wide">Face</h3>
+                <div class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-2">Head Shape</label>
+                        <div id="headStyles">
+                            <!-- Head styles will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-3">Skin Colors</label>
+                        <div class="space-y-1" id="skinColors">
+                            <!-- Skin colors will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-2">Eyes</label>
+                        <div id="eyeStyles">
+                            <!-- Eye styles will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-3">Eye Colors</label>
+                        <div class="space-y-1" id="eyesColors">
+                            <!-- Eye colors will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-2">Eyebrows</label>
+                        <div id="eyebrowStyles">
+                            <!-- Eyebrow styles will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-3">Eyebrow Colors</label>
+                        <div class="space-y-1" id="eyebrowsColors">
+                            <!-- Eyebrow colors will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-2">Nose</label>
+                        <div id="noseStyles">
+                            <!-- Nose styles will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-2">Mouth</label>
+                        <div id="mouthStyles">
+                            <!-- Mouth styles will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-3">Mouth Colors</label>
+                        <div class="space-y-1" id="mouthColors">
+                            <!-- Mouth colors will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-2">Freckles</label>
+                        <div id="frecklesStyles">
+                            <!-- Freckles styles will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-3">Freckles Colors</label>
+                        <div class="space-y-1" id="frecklesColors">
+                            <!-- Freckles colors will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-2" for="frecklesProbability">Freckles Probability</label>
+                        <input type="range" id="frecklesProbability" class="w-full my-2" min="0" max="100" value="5">
+                        <span class="inline-block bg-slate-100 px-2 py-1 rounded text-xs font-medium text-slate-600 ml-2" id="frecklesValue">5%</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Accessories -->
+            <div class="border-b border-slate-100 p-6">
+                <h3 class="text-sm font-semibold text-gray-600 mb-4 uppercase tracking-wide">Accessories</h3>
+                <div class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-2">Glasses</label>
+                        <div id="glassesStyles">
+                            <!-- Glasses styles will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-3">Glasses Colors</label>
+                        <div class="space-y-1" id="glassesColors">
+                            <!-- Glasses colors will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-2" for="glassesProbability">Glasses Probability</label>
+                        <input type="range" id="glassesProbability" class="w-full my-2" min="0" max="100" value="10">
+                        <span class="inline-block bg-slate-100 px-2 py-1 rounded text-xs font-medium text-slate-600 ml-2" id="glassesValue">10%</span>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-2">Earrings</label>
+                        <div id="earringsStyles">
+                            <!-- Earrings styles will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-3">Earrings Colors</label>
+                        <div class="space-y-1" id="earringsColors">
+                            <!-- Earrings colors will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-2" for="earringsProbability">Earrings Probability</label>
+                        <input type="range" id="earringsProbability" class="w-full my-2" min="0" max="100" value="10">
+                        <span class="inline-block bg-slate-100 px-2 py-1 rounded text-xs font-medium text-slate-600 ml-2" id="earringsValue">10%</span>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-2">Beard</label>
+                        <div id="beardStyles">
+                            <!-- Beard styles will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-3">Beard Colors</label>
+                        <div class="space-y-1" id="beardColors">
+                            <!-- Beard colors will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-2" for="beardProbability">Beard Probability</label>
+                        <input type="range" id="beardProbability" class="w-full my-2" min="0" max="100" value="5">
+                        <span class="inline-block bg-slate-100 px-2 py-1 rounded text-xs font-medium text-slate-600 ml-2" id="beardValue">5%</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        
+        <main class="p-8 flex flex-col items-center justify-center bg-white ">
+            <div class="bg-slate-50 border border-slate-200 rounded-2xl p-8 mb-8 flex items-center justify-center min-h-[300px]">
+                <img id="avatarImage" src="" alt="Avatar Preview" class=" rounded-2xl shadow-xl hidden">
+                <div id="loadingIndicator" class="w-5 h-5 border-2 border-gray-200 border-t-2 border-t-blue-500 rounded-full loading"></div>
+            </div>
+            
+            <div class="flex gap-4 flex-wrap justify-center">
+                <button onclick="copyToClipboard()" class="px-4 py-2 bg-slate-100 text-slate-700 border border-slate-200 rounded-lg text-sm font-medium hover:bg-slate-200 transition-all flex items-center gap-2">
+                    📋 Copy URL
+                </button>
+                <button onclick="downloadSVG()" class="px-4 py-2 bg-slate-100 text-slate-700 border border-slate-200 rounded-lg text-sm font-medium hover:bg-slate-200 transition-all flex items-center gap-2">
+                    📄 SVG
+                </button>
+                <button onclick="downloadPNG()" class="px-4 py-2 bg-slate-100 text-slate-700 border border-slate-200 rounded-lg text-sm font-medium hover:bg-slate-200 transition-all flex items-center gap-2">
+                    🖼️ PNG
+                </button>
+                <button onclick="generateNewSeed()" class="px-4 py-2 bg-blue-500 text-white rounded-lg text-sm font-medium hover:bg-blue-600 transition-all flex items-center gap-2">
+                    ✨ New Avatar
+                </button>
+            </div>
+            
+            <div class="bg-slate-100 border border-slate-200 rounded-lg p-4 mt-8 w-full max-w-2xl">
+                <label for="avatarUrl" class="text-sm font-medium text-gray-600 block mb-2">Avatar URL:</label>
+                <input type="text" id="avatarUrl" readonly class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm font-mono bg-white">
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Configuration for different avatar styles and their options
+        const avatarConfigs = {
+            lorelei: {
+                hair: Array.from({length: 48}, (_, i) => `variant${String(i + 1).padStart(2, '0')}`),
+                eyes: Array.from({length: 24}, (_, i) => `variant${String(i + 1).padStart(2, '0')}`),
+                eyebrows: Array.from({length: 13}, (_, i) => `variant${String(i + 1).padStart(2, '0')}`),
+                nose: Array.from({length: 6}, (_, i) => `variant${String(i + 1).padStart(2, '0')}`),
+                mouth: [
+                    'happy01', 'happy02', 'happy03', 'happy04', 'happy05', 'happy06',
+                    'happy07', 'happy08', 'happy09', 'happy10', 'happy11', 'happy12',
+                    'happy13', 'happy14', 'happy15', 'happy16', 'happy17', 'happy18',
+                    'sad01', 'sad02', 'sad03', 'sad04', 'sad05', 'sad06', 'sad07', 'sad08', 'sad09'
+                ],
+                glasses: ['variant01', 'variant02', 'variant03', 'variant04', 'variant05'],
+                earrings: ['variant01', 'variant02', 'variant03'],
+                beard: ['variant01', 'variant02'],
+                hairAccessories: ['flowers'],
+                freckles: ['variant01'],
+                head: ['variant01', 'variant02', 'variant03', 'variant04'],
+                skinColors: ['fdbcbc', 'f8d25c', 'd08b5b', 'ae5d29', '614335'],
+                hairColors: ['000000', '2f1b14', '8b4513', 'daa520', 'b8860b', 'ff4500', '800080', 'ff1493', '00ced1', '32cd32'],
+                backgroundColors: ['87ceeb', 'transparent','ffffff', 'f0f0f0', 'e6e6fa', 'f0f8ff', 'ff69b4', '98fb98', 'dda0dd', 'ffd700'],
+                eyesColors: ['000000', '8b4513', '2563eb', '059669', '7c2d12'],
+                eyebrowsColors: ['000000', '8b4513', '2f1b14'],
+                glassesColors: ['000000', '1f2937', '374151', '6b7280'],
+                earringsColors: ['000000', 'ffd700', 'c0c0c0', 'ff1493'],
+                beardColors: ['000000', '8b4513', '2f1b14', 'daa520'],
+                frecklesColors: ['000000', '8b4513', 'd08b5b'],
+                mouthColors: ['000000', 'dc2626', 'ea580c']
+            }
+        };
+        
+        let currentStyle = 'lorelei';
+        let currentConfig = {};
+        let debounceTimeout;
+        
+        // Initialize the editor
+        function initEditor() {
+            setupEventListeners();
+            populateOptions();
+            initializeConfig();
+            updateAvatar();
+        }
+        
+        function setupEventListeners() {
+            // Style selector
+            document.querySelectorAll('.style-option').forEach(option => {
+                option.addEventListener('click', (e) => {
+                    document.querySelector('.style-option.active').classList.remove('active');
+                    e.target.classList.add('active');
+                    currentStyle = e.target.dataset.style;
+                    populateOptions();
+                    updateAvatar();
+                });
+            });
+            
+            // Basic controls
+            ['seedInput', 'sizeInput', 'scaleInput', 'rotateInput', 'radiusInput', 'backgroundType'].forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.addEventListener('input', debounceUpdate);
+                }
+            });
+            
+            // Range sliders
+            setupRangeSliders();
+        }
+        
+        function setupRangeSliders() {
+            const ranges = [
+                'sizeInput', 'scaleInput', 'rotateInput', 'radiusInput',
+                'hairAccessoriesProbability', 'glassesProbability', 'earringsProbability',
+                'frecklesProbability', 'beardProbability'
+            ];
+            
+            ranges.forEach(id => {
+                const input = document.getElementById(id);
+                const valueSpan = document.getElementById(id.replace('Input', 'Value').replace('Probability', 'Value'));
+                
+                if (input && valueSpan) {
+                    input.addEventListener('input', (e) => {
+                        let value = e.target.value;
+                        let suffix = '';
+                        
+                        if (id.includes('Probability')) {
+                            suffix = '%';
+                        } else if (id === 'sizeInput') {
+                            suffix = 'px';
+                        } else if (id === 'scaleInput') {
+                            suffix = '%';
+                        } else if (id === 'rotateInput') {
+                            suffix = '°';
+                        } else if (id === 'radiusInput') {
+                            suffix = '%';
+                        }
+                        
+                        valueSpan.textContent = value + suffix;
+                        debounceUpdate();
+                    });
+                }
+            });
+        }
+        
+        function populateOptions() {
+            const config = avatarConfigs[currentStyle];
+            if (!config) return;
+            
+            // Populate all hair styles (48 variants)
+            populateCheckboxGroup('hairStyles', config.hair, 'hair');
+            
+            // Populate all eye styles (24 variants)
+            populateCheckboxGroup('eyeStyles', config.eyes, 'eyes');
+            
+            // Populate eyebrows (13 variants)
+            populateCheckboxGroup('eyebrowStyles', config.eyebrows, 'eyebrows');
+            
+            // Populate nose (6 variants)
+            populateCheckboxGroup('noseStyles', config.nose, 'nose');
+            
+            // Populate all mouth styles
+            populateCheckboxGroup('mouthStyles', config.mouth, 'mouth');
+            
+            // Populate head shapes
+            populateCheckboxGroup('headStyles', config.head, 'head');
+            
+            // Populate accessories with variants
+            populateCheckboxGroup('glassesStyles', config.glasses, 'glasses');
+            populateCheckboxGroup('earringsStyles', config.earrings, 'earrings');
+            populateCheckboxGroup('beardStyles', config.beard, 'beard');
+            populateCheckboxGroup('hairAccessoriesStyles', config.hairAccessories, 'hairAccessories');
+            populateCheckboxGroup('frecklesStyles', config.freckles, 'freckles');
+            
+            // Populate color pickers
+            populateColorPickers('skinColors', config.skinColors, 'skinColor');
+            populateColorPickers('hairColors', config.hairColors, 'hairColor');
+            populateColorPickers('backgroundColors', config.backgroundColors, 'backgroundColor');
+            populateColorPickers('eyesColors', config.eyesColors, 'eyesColor');
+            populateColorPickers('eyebrowsColors', config.eyebrowsColors, 'eyebrowsColor');
+            populateColorPickers('mouthColors', config.mouthColors, 'mouthColor');
+            populateColorPickers('glassesColors', config.glassesColors, 'glassesColor');
+            populateColorPickers('earringsColors', config.earringsColors, 'earringsColor');
+            populateColorPickers('beardColors', config.beardColors, 'beardColor');
+            populateColorPickers('frecklesColors', config.frecklesColors, 'frecklesColor');
+        }
+        
+        function populateCheckboxGroup(containerId, options, configKey) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            // Add header with select all/clear buttons
+            const header = document.createElement('div');
+            header.className = 'flex justify-between items-center mb-2';
+            header.innerHTML = `
+                <span class="text-xs text-gray-500">${options.length} options</span>
+                <div class="flex gap-2">
+                    <button onclick="selectAllCheckboxes('${containerId}', '${configKey}')" class="px-2 py-1 border border-slate-200 rounded text-xs bg-white hover:bg-slate-50 transition-all">All</button>
+                    <button onclick="clearAllCheckboxes('${containerId}', '${configKey}')" class="px-2 py-1 border border-slate-200 rounded text-xs bg-white hover:bg-slate-50 transition-all">None</button>
+                </div>
+            `;
+            container.appendChild(header);
+            
+            // Add checkbox container
+            const checkboxContainer = document.createElement('div');
+            checkboxContainer.className = 'grid grid-cols-[repeat(auto-fit,minmax(100px,1fr))] gap-2 max-h-[200px] overflow-y-auto border border-slate-200 rounded-lg p-2';
+            
+            options.forEach(option => {
+                const item = document.createElement('div');
+                item.className = 'flex items-center gap-2 p-2 border border-slate-200 rounded cursor-pointer transition-all text-xs hover:bg-slate-50';
+                item.innerHTML = `
+                    <input type="checkbox" id="${configKey}_${option}" value="${option}" class="m-0">
+                    <label for="${configKey}_${option}" class="cursor-pointer">${option}</label>
+                `;
+                
+                const checkbox = item.querySelector('input');
+                checkbox.addEventListener('change', () => {
+                    item.classList.toggle('bg-blue-50', checkbox.checked);
+                    item.classList.toggle('border-blue-500', checkbox.checked);
+                    debounceUpdate();
+                });
+                
+                checkboxContainer.appendChild(item);
+            });
+            
+            container.appendChild(checkboxContainer);
+        }
+        
+        function selectAllCheckboxes(containerId, configKey) {
+            const container = document.getElementById(containerId);
+            const checkboxes = container.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = true;
+                checkbox.parentElement.classList.add('selected');
+            });
+            debounceUpdate();
+        }
+        
+        function clearAllCheckboxes(containerId, configKey) {
+            const container = document.getElementById(containerId);
+            const checkboxes = container.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = false;
+                checkbox.parentElement.classList.remove('selected');
+            });
+            debounceUpdate();
+        }
+        
+        function populateColorPickers(containerId, colors, configKey) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            // Add custom color input at the top
+            const customColorDiv = document.createElement('div');
+            customColorDiv.className = 'mb-3 p-3 border border-slate-200 rounded-lg bg-slate-50';
+            customColorDiv.innerHTML = `
+                <label class="block text-sm font-medium text-gray-700 mb-2">Custom Color</label>
+                <div class="flex gap-2 items-center">
+                    <input type="color" id="${configKey}_custom_picker" class="w-12 h-10 border border-slate-300 rounded cursor-pointer">
+                    <input type="text" id="${configKey}_custom_text" placeholder="#000000" class="flex-1 px-3 py-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-mono text-sm">
+                    <button onclick="applyCustomColor('${configKey}')" class="px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors text-sm">Apply</button>
+                </div>
+            `;
+            
+            // Set up custom color input synchronization
+            const customPicker = customColorDiv.querySelector(`#${configKey}_custom_picker`);
+            const customText = customColorDiv.querySelector(`#${configKey}_custom_text`);
+            
+            customPicker.addEventListener('input', () => {
+                customText.value = customPicker.value;
+            });
+            
+            customText.addEventListener('input', () => {
+                let value = customText.value;
+                if (value.match(/^#?[0-9a-f]{6}$/i)) {
+                    if (!value.startsWith('#')) value = '#' + value;
+                    customPicker.value = value;
+                }
+            });
+            
+            container.appendChild(customColorDiv);
+            
+            // Add preset colors section
+            const presetDiv = document.createElement('div');
+            presetDiv.innerHTML = `<label class="block text-sm font-medium text-gray-700 mb-3">Preset Colors</label>`;
+            
+            const colorGrid = document.createElement('div');
+            colorGrid.className = 'grid grid-cols-4 gap-3 max-h-[240px] overflow-y-auto';
+            
+            colors.forEach((color, index) => {
+                const picker = document.createElement('div');
+                picker.className = 'color-picker flex flex-col items-center cursor-pointer transition-all hover:scale-105 p-2 rounded-lg hover:bg-slate-100';
+                
+                // Convert color name to hex for display
+                let hexColor = color;
+                if (color === 'transparent') {
+                    hexColor = 'ffffff';
+                } else if (!color.startsWith('#') && /^[0-9a-f]{6}$/i.test(color)) {
+                    hexColor = color;
+                }
+                
+                picker.innerHTML = `
+                    <div class="w-12 h-12 border-2 border-slate-300 rounded-lg overflow-hidden relative group mb-2 flex-shrink-0">
+                        ${color === 'transparent' ? 
+                            '<div class="w-full h-full bg-white" style="background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%); background-size: 6px 6px; background-position: 0 0, 0 3px, 3px -3px, -3px 0px;"></div>' :
+                            `<div class="w-full h-full" style="background-color: #${hexColor}"></div>`
+                        }
+                        <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all rounded-lg"></div>
+                    </div>
+                    <div class="text-[10px] text-center font-mono text-gray-600 leading-tight break-all w-full">
+                        ${color === 'transparent' ? 'transparent' : `#${hexColor}`}
+                    </div>
+                `;
+                
+                picker.addEventListener('click', () => {
+                    document.querySelectorAll(`#${containerId} .color-picker`).forEach(p => {
+                        p.classList.remove('ring-2', 'ring-blue-500', 'ring-offset-2');
+                    });
+                    picker.classList.add('ring-2', 'ring-blue-500', 'ring-offset-2');
+                    currentConfig[configKey] = color;
+                    debounceUpdate();
+                });
+                
+                // Select first color by default for most properties, transparent for backgroundColor
+                if (index === 0 || (configKey === 'backgroundColor' && color === 'transparent')) {
+                    picker.classList.add('ring-2', 'ring-blue-500', 'ring-offset-2');
+                }
+                
+                colorGrid.appendChild(picker);
+            });
+            
+            presetDiv.appendChild(colorGrid);
+            container.appendChild(presetDiv);
+        }
+        
+        function applyCustomColor(configKey) {
+            const textInput = document.getElementById(`${configKey}_custom_text`);
+            let colorValue = textInput.value;
+            
+            // Validate and normalize the color value
+            if (colorValue.match(/^#?[0-9a-f]{6}$/i)) {
+                if (colorValue.startsWith('#')) {
+                    colorValue = colorValue.substring(1);
+                }
+                
+                // Clear other selections
+                const container = document.getElementById(configKey + 'Colors');
+                if (container) {
+                    container.querySelectorAll('.color-picker').forEach(p => {
+                        p.classList.remove('ring-2', 'ring-blue-500', 'ring-offset-2');
+                    });
+                }
+                
+                // Apply the custom color
+                config[configKey] = colorValue;
+                debounceUpdate();
+                
+                // Show success feedback
+                textInput.classList.add('ring-2', 'ring-green-500');
+                setTimeout(() => {
+                    textInput.classList.remove('ring-2', 'ring-green-500');
+                }, 1000);
+            } else {
+                // Show error feedback
+                textInput.classList.add('ring-2', 'ring-red-500');
+                setTimeout(() => {
+                    textInput.classList.remove('ring-2', 'ring-red-500');
+                }, 1000);
+            }
+        }
+
+        function initializeConfig() {
+            currentConfig = {
+                seed: 'custom-avatar',
+                size: 200,
+                scale: 100,
+                rotate: 0,
+                radius: 0,
+                backgroundType: 'solid'
+            };
+        }
+        
+        function debounceUpdate() {
+            clearTimeout(debounceTimeout);
+            debounceTimeout = setTimeout(updateAvatar, 300);
+        }
+        
+        function updateAvatar() {
+            const config = gatherCurrentConfig();
+            const url = buildAvatarUrl(config);
+            
+            document.getElementById('avatarUrl').value = url;
+            
+            const img = document.getElementById('avatarImage');
+            const loading = document.getElementById('loadingIndicator');
+            
+            loading.style.display = 'block';
+            img.style.display = 'none';
+            
+            const newImg = new Image();
+            newImg.onload = () => {
+                img.src = url;
+                img.style.display = 'block';
+                loading.style.display = 'none';
+            };
+            newImg.onerror = () => {
+                loading.style.display = 'none';
+                img.alt = 'Failed to load avatar';
+            };
+            newImg.src = url;
+        }
+        
+        function gatherCurrentConfig() {
+            const config = {
+                seed: document.getElementById('seedInput').value || 'custom-avatar',
+                size: document.getElementById('sizeInput').value,
+                scale: document.getElementById('scaleInput').value,
+                rotate: document.getElementById('rotateInput').value,
+                radius: document.getElementById('radiusInput').value,
+                backgroundType: document.getElementById('backgroundType').value
+            };
+            
+            // Gather selected options from checkboxes
+            ['hair', 'eyes', 'eyebrows', 'nose', 'mouth', 'head', 'glasses', 'earrings', 'beard', 'hairAccessories', 'freckles'].forEach(key => {
+                const selected = [];
+                document.querySelectorAll(`input[id^="${key}_"]:checked`).forEach(input => {
+                    selected.push(input.value);
+                });
+                if (selected.length > 0) {
+                    config[key] = selected;
+                }
+            });
+            
+            // Gather selected colors
+            ['skinColor', 'hairColor', 'backgroundColor', 'eyesColor', 'eyebrowsColor', 'mouthColor', 'glassesColor', 'earringsColor', 'beardColor', 'frecklesColor'].forEach(key => {
+                // Check if there's a value already set in config (from custom color or preset selection)
+                if (config[key]) {
+                    // Convert single color to array format expected by DiceBear
+                    if (typeof config[key] === 'string') {
+                        config[key] = [config[key]];
+                    }
+                } else {
+                    // Fallback to checking for selected preset colors
+                    const container = document.getElementById(key + 's');
+                    const selected = container ? container.querySelector('.color-picker.ring-2') : null;
+                    if (selected) {
+                        const colorDiv = selected.querySelector('div[style*="background-color"]');
+                        if (colorDiv) {
+                            const style = colorDiv.getAttribute('style');
+                            const match = style.match(/#([0-9a-f]{6})/i);
+                            if (match) {
+                                config[key] = [match[1]];
+                            }
+                        } else if (selected.textContent.includes('transparent')) {
+                            config[key] = ['transparent'];
+                        }
+                    }
+                }
+            });
+            
+            // Gather probability values
+            ['hairAccessoriesProbability', 'glassesProbability', 'earringsProbability', 'frecklesProbability', 'beardProbability'].forEach(key => {
+                const element = document.getElementById(key);
+                if (element) {
+                    config[key] = element.value;
+                }
+            });
+            
+            return config;
+        }
+        
+        function buildAvatarUrl(config) {
+            const baseUrl = `https://api.dicebear.com/9.x/${currentStyle}/svg`;
+            const params = new URLSearchParams();
+            
+            Object.keys(config).forEach(key => {
+                const value = config[key];
+                if (Array.isArray(value)) {
+                    value.forEach(v => params.append(key, v));
+                } else {
+                    params.append(key, value);
+                }
+            });
+            
+            return `${baseUrl}?${params.toString()}`;
+        }
+        
+        function randomizeAvatar() {
+            document.getElementById('seedInput').value = 'seed_' + Math.random().toString(36).substr(2, 9);
+            
+            // Randomize some sliders
+            document.getElementById('scaleInput').value = Math.floor(Math.random() * 50) + 75;
+            document.getElementById('rotateInput').value = Math.floor(Math.random() * 360);
+            document.getElementById('radiusInput').value = Math.floor(Math.random() * 25);
+            
+            // Trigger updates for sliders
+            document.querySelectorAll('.form-range').forEach(input => {
+                input.dispatchEvent(new Event('input'));
+            });
+            
+            updateAvatar();
+        }
+        
+        function generateNewSeed() {
+            document.getElementById('seedInput').value = 'avatar_' + Date.now();
+            updateAvatar();
+        }
+        
+        function copyToClipboard() {
+            const url = document.getElementById('avatarUrl');
+            url.select();
+            document.execCommand('copy');
+            
+            // Show feedback
+            const btn = event.target;
+            const originalText = btn.textContent;
+            btn.textContent = '✅ Copied!';
+            setTimeout(() => {
+                btn.textContent = originalText;
+            }, 2000);
+        }
+        
+        function downloadAvatar() {
+            const url = document.getElementById('avatarUrl').value;
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `avatar-${Date.now()}.svg`;
+            link.click();
+        }
+        
+        function downloadSVG() {
+            downloadAvatar();
+        }
+        
+        function downloadPNG() {
+            const svgUrl = document.getElementById('avatarUrl').value;
+            const img = new Image();
+            img.crossOrigin = 'anonymous';
+            
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                canvas.width = this.width;
+                canvas.height = this.height;
+                
+                ctx.drawImage(this, 0, 0);
+                
+                canvas.toBlob(function(blob) {
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = `avatar-${Date.now()}.png`;
+                    link.click();
+                    URL.revokeObjectURL(url);
+                }, 'image/png');
+            };
+            
+            img.src = svgUrl;
+        }
+        
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', initEditor);
+    </script>
+</body>
+</html>
