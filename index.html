@@ -37,13 +37,24 @@
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans leading-relaxed">
     <header class="bg-white border-b border-slate-200 px-8 py-4 flex justify-between items-center sticky top-0 z-50 shadow-sm">
-        <h1 class="text-2xl font-bold text-slate-900">🎨 Basher Avatar Editor</h1>
+        <h1 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-blue-500">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128zm0 0a15.998 15.998 0 003.388-1.62m-5.049 12.525a3 3 0 01-2.12-2.12m2.12 2.12a3 3 0 002.12-2.12m-2.12 2.12c.412-.412.833-.833 1.255-1.255m7.555-12.55a3 3 0 00-2.12-2.12m2.12 2.12a3 3 0 012.12-2.12m-2.12 2.12c-.412.412-.833.833-1.255 1.255m-7.555 12.55a3 3 0 01-2.12 2.12m2.12-2.12a3 3 0 002.12 2.12m-2.12-2.12c.412-.412.833-.833 1.255-1.255" />
+            </svg>
+            Basher Avatar Editor
+        </h1>
         <div class="flex gap-4">
             <button onclick="randomizeAvatar()" class="px-4 py-2 bg-slate-100 text-slate-700 border border-slate-200 rounded-lg text-sm font-medium hover:bg-slate-200 transition-all flex items-center gap-2">
-                🎲 Random
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+                </svg>
+                Random
             </button>
             <button onclick="downloadAvatar()" class="px-4 py-2 bg-blue-500 text-white rounded-lg text-sm font-medium hover:bg-blue-600 transition-all flex items-center gap-2">
-                💾 Download
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                </svg>
+                Download
             </button>
         </div>
     </header>
@@ -127,23 +138,10 @@
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium text-gray-600 mb-3">Hair Colors</label>
-                        <div class="space-y-1" id="hairColors">
-                            <!-- Hair colors will be populated by JavaScript -->
-                        </div>
-                    </div>
-                    
-                    <div>
                         <label class="block text-sm font-medium text-gray-600 mb-2">Hair Accessories</label>
                         <div id="hairAccessoriesStyles">
                             <!-- Hair accessories will be populated by JavaScript -->
                         </div>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-medium text-gray-600 mb-2" for="hairAccessoriesProbability">Hair Accessories Probability</label>
-                        <input type="range" id="hairAccessoriesProbability" class="w-full my-2" min="0" max="100" value="5">
-                        <span class="inline-block bg-slate-100 px-2 py-1 rounded text-xs font-medium text-slate-600 ml-2" id="hairAccessoriesValue">5%</span>
                     </div>
                 </div>
             </div>
@@ -160,13 +158,6 @@
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium text-gray-600 mb-3">Skin Colors</label>
-                        <div class="space-y-1" id="skinColors">
-                            <!-- Skin colors will be populated by JavaScript -->
-                        </div>
-                    </div>
-                    
-                    <div>
                         <label class="block text-sm font-medium text-gray-600 mb-2">Eyes</label>
                         <div id="eyeStyles">
                             <!-- Eye styles will be populated by JavaScript -->
@@ -174,23 +165,9 @@
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium text-gray-600 mb-3">Eye Colors</label>
-                        <div class="space-y-1" id="eyesColors">
-                            <!-- Eye colors will be populated by JavaScript -->
-                        </div>
-                    </div>
-                    
-                    <div>
                         <label class="block text-sm font-medium text-gray-600 mb-2">Eyebrows</label>
                         <div id="eyebrowStyles">
                             <!-- Eyebrow styles will be populated by JavaScript -->
-                        </div>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-medium text-gray-600 mb-3">Eyebrow Colors</label>
-                        <div class="space-y-1" id="eyebrowsColors">
-                            <!-- Eyebrow colors will be populated by JavaScript -->
                         </div>
                     </div>
                     
@@ -209,30 +186,10 @@
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium text-gray-600 mb-3">Mouth Colors</label>
-                        <div class="space-y-1" id="mouthColors">
-                            <!-- Mouth colors will be populated by JavaScript -->
-                        </div>
-                    </div>
-                    
-                    <div>
                         <label class="block text-sm font-medium text-gray-600 mb-2">Freckles</label>
                         <div id="frecklesStyles">
                             <!-- Freckles styles will be populated by JavaScript -->
                         </div>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-medium text-gray-600 mb-3">Freckles Colors</label>
-                        <div class="space-y-1" id="frecklesColors">
-                            <!-- Freckles colors will be populated by JavaScript -->
-                        </div>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-medium text-gray-600 mb-2" for="frecklesProbability">Freckles Probability</label>
-                        <input type="range" id="frecklesProbability" class="w-full my-2" min="0" max="100" value="5">
-                        <span class="inline-block bg-slate-100 px-2 py-1 rounded text-xs font-medium text-slate-600 ml-2" id="frecklesValue">5%</span>
                     </div>
                 </div>
             </div>
@@ -249,19 +206,6 @@
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium text-gray-600 mb-3">Glasses Colors</label>
-                        <div class="space-y-1" id="glassesColors">
-                            <!-- Glasses colors will be populated by JavaScript -->
-                        </div>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-medium text-gray-600 mb-2" for="glassesProbability">Glasses Probability</label>
-                        <input type="range" id="glassesProbability" class="w-full my-2" min="0" max="100" value="10">
-                        <span class="inline-block bg-slate-100 px-2 py-1 rounded text-xs font-medium text-slate-600 ml-2" id="glassesValue">10%</span>
-                    </div>
-                    
-                    <div>
                         <label class="block text-sm font-medium text-gray-600 mb-2">Earrings</label>
                         <div id="earringsStyles">
                             <!-- Earrings styles will be populated by JavaScript -->
@@ -269,36 +213,10 @@
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium text-gray-600 mb-3">Earrings Colors</label>
-                        <div class="space-y-1" id="earringsColors">
-                            <!-- Earrings colors will be populated by JavaScript -->
-                        </div>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-medium text-gray-600 mb-2" for="earringsProbability">Earrings Probability</label>
-                        <input type="range" id="earringsProbability" class="w-full my-2" min="0" max="100" value="10">
-                        <span class="inline-block bg-slate-100 px-2 py-1 rounded text-xs font-medium text-slate-600 ml-2" id="earringsValue">10%</span>
-                    </div>
-                    
-                    <div>
                         <label class="block text-sm font-medium text-gray-600 mb-2">Beard</label>
                         <div id="beardStyles">
                             <!-- Beard styles will be populated by JavaScript -->
                         </div>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-medium text-gray-600 mb-3">Beard Colors</label>
-                        <div class="space-y-1" id="beardColors">
-                            <!-- Beard colors will be populated by JavaScript -->
-                        </div>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-medium text-gray-600 mb-2" for="beardProbability">Beard Probability</label>
-                        <input type="range" id="beardProbability" class="w-full my-2" min="0" max="100" value="5">
-                        <span class="inline-block bg-slate-100 px-2 py-1 rounded text-xs font-medium text-slate-600 ml-2" id="beardValue">5%</span>
                     </div>
                 </div>
             </div>
@@ -312,16 +230,28 @@
             
             <div class="flex gap-4 flex-wrap justify-center">
                 <button onclick="copyToClipboard()" class="px-4 py-2 bg-slate-100 text-slate-700 border border-slate-200 rounded-lg text-sm font-medium hover:bg-slate-200 transition-all flex items-center gap-2">
-                    📋 Copy URL
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.666 3.888A2.25 2.25 0 0013.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 01-.75.75H9a.75.75 0 01-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 01-2.25 2.25H6.75A2.25 2.25 0 014.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 011.927-.184" />
+                    </svg>
+                    Copy URL
                 </button>
                 <button onclick="downloadSVG()" class="px-4 py-2 bg-slate-100 text-slate-700 border border-slate-200 rounded-lg text-sm font-medium hover:bg-slate-200 transition-all flex items-center gap-2">
-                    📄 SVG
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5" />
+                    </svg>
+                    SVG
                 </button>
                 <button onclick="downloadPNG()" class="px-4 py-2 bg-slate-100 text-slate-700 border border-slate-200 rounded-lg text-sm font-medium hover:bg-slate-200 transition-all flex items-center gap-2">
-                    🖼️ PNG
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a2.25 2.25 0 002.25-2.25V6a2.25 2.25 0 00-2.25-2.25H3.75A2.25 2.25 0 001.5 6v12a2.25 2.25 0 002.25 2.25z" />
+                    </svg>
+                    PNG
                 </button>
                 <button onclick="generateNewSeed()" class="px-4 py-2 bg-blue-500 text-white rounded-lg text-sm font-medium hover:bg-blue-600 transition-all flex items-center gap-2">
-                    ✨ New Avatar
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
+                    </svg>
+                    New Avatar
                 </button>
             </div>
             
@@ -372,9 +302,145 @@
         // Initialize the editor
         function initEditor() {
             setupEventListeners();
-            populateOptions();
-            initializeConfig();
+            
+            // Try to load state from local storage
+            if (!loadState()) {
+                populateOptions();
+                initializeConfig();
+            }
+            
             updateAvatar();
+        }
+
+        function saveState(config) {
+            try {
+                const state = {
+                    style: currentStyle,
+                    config: config,
+                    currentConfig: currentConfig, // Save the internal config state too (for colors)
+                    timestamp: Date.now()
+                };
+                localStorage.setItem('basherAvatarEditorState', JSON.stringify(state));
+            } catch (e) {
+                console.error("Failed to save state", e);
+            }
+        }
+
+        function loadState() {
+            const saved = localStorage.getItem('basherAvatarEditorState');
+            if (!saved) return false;
+            
+            try {
+                const state = JSON.parse(saved);
+                
+                // Restore style
+                if (state.style) {
+                    currentStyle = state.style;
+                    // Update style selector UI
+                    document.querySelector('.style-option.active')?.classList.remove('active');
+                    const newActive = document.querySelector(`.style-option[data-style="${currentStyle}"]`);
+                    if (newActive) newActive.classList.add('active');
+                }
+                
+                // Populate options for the restored style
+                populateOptions();
+                
+                const config = state.config;
+                if (!config) return false;
+
+                // Restore internal config
+                if (state.currentConfig) {
+                    currentConfig = state.currentConfig;
+                }
+                
+                // Restore inputs
+                if (config.seed) document.getElementById('seedInput').value = config.seed;
+                if (config.size) {
+                    document.getElementById('sizeInput').value = config.size;
+                    document.getElementById('sizeValue').textContent = config.size + 'px';
+                }
+                if (config.scale) {
+                    document.getElementById('scaleInput').value = config.scale;
+                    document.getElementById('scaleValue').textContent = config.scale + '%';
+                }
+                if (config.rotate) {
+                    document.getElementById('rotateInput').value = config.rotate;
+                    document.getElementById('rotateValue').textContent = config.rotate + '°';
+                }
+                if (config.radius) {
+                    document.getElementById('radiusInput').value = config.radius;
+                    document.getElementById('radiusValue').textContent = config.radius + '%';
+                }
+                if (config.backgroundType) document.getElementById('backgroundType').value = config.backgroundType;
+                
+                // Restore radio buttons
+                ['hair', 'eyes', 'eyebrows', 'nose', 'mouth', 'head', 'glasses', 'earrings', 'beard', 'hairAccessories', 'freckles'].forEach(key => {
+                    if (config[key] && config[key].length > 0) {
+                        const val = config[key][0];
+                        const radio = document.getElementById(`${key}_${val}`);
+                        if (radio) {
+                            radio.checked = true;
+                            // Manually trigger visual update since we're not dispatching event for all
+                            const container = document.getElementById(key + 'Styles');
+                            if (container) {
+                                const radioContainer = container.querySelector('.grid');
+                                if (radioContainer) {
+                                    radioContainer.querySelectorAll('div').forEach(div => {
+                                        div.classList.remove('bg-blue-50', 'border-blue-500');
+                                    });
+                                    radio.parentElement.classList.add('bg-blue-50', 'border-blue-500');
+                                }
+                            }
+                        }
+                    }
+                });
+                
+                // Restore colors UI
+                 ['backgroundColor'].forEach(key => {
+                    const colorVal = currentConfig[key] || (config[key] && config[key][0]);
+                    if (colorVal) {
+                        const container = document.getElementById(key + 's');
+                        if (container) {
+                            const pickers = container.querySelectorAll('.color-picker');
+                            pickers.forEach(p => p.classList.remove('ring-2', 'ring-blue-500', 'ring-offset-2'));
+                            
+                            // Try to find matching preset
+                            let found = false;
+                            pickers.forEach(p => {
+                                const colorDiv = p.querySelector('div[style*="background-color"]');
+                                if (colorDiv) {
+                                    const style = colorDiv.getAttribute('style');
+                                    const match = style.match(/#([0-9a-f]{6})/i);
+                                    if (match && match[1].toLowerCase() === colorVal.toLowerCase()) {
+                                        p.classList.add('ring-2', 'ring-blue-500', 'ring-offset-2');
+                                        found = true;
+                                    }
+                                } else if (colorVal === 'transparent' && p.textContent.includes('transparent')) {
+                                    p.classList.add('ring-2', 'ring-blue-500', 'ring-offset-2');
+                                    found = true;
+                                }
+                            });
+                            
+                            // If not found in presets, it might be custom.
+                            if (!found) {
+                                const customText = document.getElementById(`${key}_custom_text`);
+                                const customPicker = document.getElementById(`${key}_custom_picker`);
+                                if (customText && customPicker) {
+                                    customText.value = colorVal;
+                                    if (colorVal.match(/^[0-9a-f]{6}$/i)) {
+                                         customPicker.value = '#' + colorVal;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+
+                return true;
+            } catch (e) {
+                console.error("Failed to load state", e);
+                return false;
+            }
         }
         
         function setupEventListeners() {
@@ -403,9 +469,7 @@
         
         function setupRangeSliders() {
             const ranges = [
-                'sizeInput', 'scaleInput', 'rotateInput', 'radiusInput',
-                'hairAccessoriesProbability', 'glassesProbability', 'earringsProbability',
-                'frecklesProbability', 'beardProbability'
+                'sizeInput', 'scaleInput', 'rotateInput', 'radiusInput'
             ];
             
             ranges.forEach(id => {
@@ -466,16 +530,7 @@
             populateCheckboxGroup('frecklesStyles', config.freckles, 'freckles');
             
             // Populate color pickers
-            populateColorPickers('skinColors', config.skinColors, 'skinColor');
-            populateColorPickers('hairColors', config.hairColors, 'hairColor');
             populateColorPickers('backgroundColors', config.backgroundColors, 'backgroundColor');
-            populateColorPickers('eyesColors', config.eyesColors, 'eyesColor');
-            populateColorPickers('eyebrowsColors', config.eyebrowsColors, 'eyebrowsColor');
-            populateColorPickers('mouthColors', config.mouthColors, 'mouthColor');
-            populateColorPickers('glassesColors', config.glassesColors, 'glassesColor');
-            populateColorPickers('earringsColors', config.earringsColors, 'earringsColor');
-            populateColorPickers('beardColors', config.beardColors, 'beardColor');
-            populateColorPickers('frecklesColors', config.frecklesColors, 'frecklesColor');
         }
         
         function populateCheckboxGroup(containerId, options, configKey) {
@@ -484,61 +539,62 @@
             
             container.innerHTML = '';
             
-            // Add header with select all/clear buttons
+            // Add header
             const header = document.createElement('div');
             header.className = 'flex justify-between items-center mb-2';
             header.innerHTML = `
                 <span class="text-xs text-gray-500">${options.length} options</span>
-                <div class="flex gap-2">
-                    <button onclick="selectAllCheckboxes('${containerId}', '${configKey}')" class="px-2 py-1 border border-slate-200 rounded text-xs bg-white hover:bg-slate-50 transition-all">All</button>
-                    <button onclick="clearAllCheckboxes('${containerId}', '${configKey}')" class="px-2 py-1 border border-slate-200 rounded text-xs bg-white hover:bg-slate-50 transition-all">None</button>
-                </div>
             `;
             container.appendChild(header);
             
-            // Add checkbox container
-            const checkboxContainer = document.createElement('div');
-            checkboxContainer.className = 'grid grid-cols-[repeat(auto-fit,minmax(100px,1fr))] gap-2 max-h-[200px] overflow-y-auto border border-slate-200 rounded-lg p-2';
+            // Add radio container
+            const radioContainer = document.createElement('div');
+            radioContainer.className = 'grid grid-cols-[repeat(auto-fit,minmax(100px,1fr))] gap-2 max-h-[200px] overflow-y-auto border border-slate-200 rounded-lg p-2';
             
+            // Add "None" option
+            const noneItem = document.createElement('div');
+            noneItem.className = 'flex items-center gap-2 p-2 border border-slate-200 rounded cursor-pointer transition-all text-xs hover:bg-slate-50';
+            noneItem.innerHTML = `
+                <input type="radio" name="${configKey}" id="${configKey}_none" value="" class="m-0">
+                <label for="${configKey}_none" class="cursor-pointer">None</label>
+            `;
+            const noneRadio = noneItem.querySelector('input');
+            noneRadio.addEventListener('change', () => {
+                // Uncheck all others visually
+                radioContainer.querySelectorAll('div').forEach(div => {
+                    div.classList.remove('bg-blue-50', 'border-blue-500');
+                });
+                if (noneRadio.checked) {
+                    noneItem.classList.add('bg-blue-50', 'border-blue-500');
+                }
+                debounceUpdate();
+            });
+            radioContainer.appendChild(noneItem);
+
             options.forEach(option => {
                 const item = document.createElement('div');
                 item.className = 'flex items-center gap-2 p-2 border border-slate-200 rounded cursor-pointer transition-all text-xs hover:bg-slate-50';
                 item.innerHTML = `
-                    <input type="checkbox" id="${configKey}_${option}" value="${option}" class="m-0">
+                    <input type="radio" name="${configKey}" id="${configKey}_${option}" value="${option}" class="m-0">
                     <label for="${configKey}_${option}" class="cursor-pointer">${option}</label>
                 `;
                 
-                const checkbox = item.querySelector('input');
-                checkbox.addEventListener('change', () => {
-                    item.classList.toggle('bg-blue-50', checkbox.checked);
-                    item.classList.toggle('border-blue-500', checkbox.checked);
+                const radio = item.querySelector('input');
+                radio.addEventListener('change', () => {
+                    // Uncheck all others visually
+                    radioContainer.querySelectorAll('div').forEach(div => {
+                        div.classList.remove('bg-blue-50', 'border-blue-500');
+                    });
+                    if (radio.checked) {
+                        item.classList.add('bg-blue-50', 'border-blue-500');
+                    }
                     debounceUpdate();
                 });
                 
-                checkboxContainer.appendChild(item);
+                radioContainer.appendChild(item);
             });
             
-            container.appendChild(checkboxContainer);
-        }
-        
-        function selectAllCheckboxes(containerId, configKey) {
-            const container = document.getElementById(containerId);
-            const checkboxes = container.querySelectorAll('input[type="checkbox"]');
-            checkboxes.forEach(checkbox => {
-                checkbox.checked = true;
-                checkbox.parentElement.classList.add('selected');
-            });
-            debounceUpdate();
-        }
-        
-        function clearAllCheckboxes(containerId, configKey) {
-            const container = document.getElementById(containerId);
-            const checkboxes = container.querySelectorAll('input[type="checkbox"]');
-            checkboxes.forEach(checkbox => {
-                checkbox.checked = false;
-                checkbox.parentElement.classList.remove('selected');
-            });
-            debounceUpdate();
+            container.appendChild(radioContainer);
         }
         
         function populateColorPickers(containerId, colors, configKey) {
@@ -649,7 +705,7 @@
                 }
                 
                 // Apply the custom color
-                config[configKey] = colorValue;
+                currentConfig[configKey] = colorValue;
                 debounceUpdate();
                 
                 // Show success feedback
@@ -684,6 +740,7 @@
         
         function updateAvatar() {
             const config = gatherCurrentConfig();
+            saveState(config);
             const url = buildAvatarUrl(config);
             
             document.getElementById('avatarUrl').value = url;
@@ -717,24 +774,26 @@
                 backgroundType: document.getElementById('backgroundType').value
             };
             
-            // Gather selected options from checkboxes
+            // Gather selected options from radio buttons
             ['hair', 'eyes', 'eyebrows', 'nose', 'mouth', 'head', 'glasses', 'earrings', 'beard', 'hairAccessories', 'freckles'].forEach(key => {
-                const selected = [];
-                document.querySelectorAll(`input[id^="${key}_"]:checked`).forEach(input => {
-                    selected.push(input.value);
-                });
-                if (selected.length > 0) {
-                    config[key] = selected;
+                const selected = document.querySelector(`input[name="${key}"]:checked`);
+                if (selected && selected.value) {
+                    config[key] = [selected.value];
+
+                    // Set probability to 100% for accessories to ensure they appear
+                    if (['glasses', 'earrings', 'beard', 'hairAccessories', 'freckles'].includes(key)) {
+                        config[key + 'Probability'] = 100;
+                    }
                 }
             });
             
             // Gather selected colors
-            ['skinColor', 'hairColor', 'backgroundColor', 'eyesColor', 'eyebrowsColor', 'mouthColor', 'glassesColor', 'earringsColor', 'beardColor', 'frecklesColor'].forEach(key => {
-                // Check if there's a value already set in config (from custom color or preset selection)
-                if (config[key]) {
+            ['backgroundColor'].forEach(key => {
+                // Check if there's a value already set in currentConfig (from custom color or preset selection)
+                if (currentConfig[key]) {
                     // Convert single color to array format expected by DiceBear
-                    if (typeof config[key] === 'string') {
-                        config[key] = [config[key]];
+                    if (typeof currentConfig[key] === 'string') {
+                        config[key] = [currentConfig[key]];
                     }
                 } else {
                     // Fallback to checking for selected preset colors
@@ -752,14 +811,6 @@
                             config[key] = ['transparent'];
                         }
                     }
-                }
-            });
-            
-            // Gather probability values
-            ['hairAccessoriesProbability', 'glassesProbability', 'earringsProbability', 'frecklesProbability', 'beardProbability'].forEach(key => {
-                const element = document.getElementById(key);
-                if (element) {
-                    config[key] = element.value;
                 }
             });
             
