@@ -164,6 +164,25 @@
             Basher Editor
         </h1>
         <div class="flex gap-3">
+            <!-- Layout Controls -->
+            <div class="hidden md:flex items-center bg-slate-100 rounded-xl p-1 border border-slate-200 dark:bg-slate-800 dark:border-slate-700 mr-2">
+                <button onclick="setLayout('left')" id="btn-layout-left" class="p-1.5 rounded-lg text-slate-500 hover:bg-white hover:text-slate-700 hover:shadow-sm transition-all dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-slate-200" title="Dock Left">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 4.5v15m6-15v15m-10.875 0h15.75c.621 0 1.125-.504 1.125-1.125V5.625c0-.621-.504-1.125-1.125-1.125H4.125C3.504 4.5 3 5.004 3 5.625v12.75c0 .621.504 1.125 1.125 1.125z" />
+                    </svg>
+                </button>
+                <button onclick="setLayout('bottom')" id="btn-layout-bottom" class="p-1.5 rounded-lg text-slate-500 hover:bg-white hover:text-slate-700 hover:shadow-sm transition-all dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-slate-200" title="Dock Bottom">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15h15m-15 6h15m-15-12h15m-15-6h15" />
+                    </svg>
+                </button>
+                <button onclick="setLayout('right')" id="btn-layout-right" class="p-1.5 rounded-lg text-slate-500 hover:bg-white hover:text-slate-700 hover:shadow-sm transition-all dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-slate-200" title="Dock Right">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 4.5v15m-6-15v15m-4.875 0h15.75c.621 0 1.125-.504 1.125-1.125V5.625c0-.621-.504-1.125-1.125-1.125H4.125C3.504 4.5 3 5.004 3 5.625v12.75c0 .621.504 1.125 1.125 1.125z" />
+                    </svg>
+                </button>
+            </div>
+
             <button onclick="randomizeAvatar()" class="px-4 py-2.5 bg-white text-slate-600 border border-slate-200 rounded-xl text-sm font-semibold hover:bg-slate-50 hover:border-slate-300 hover:text-slate-900 transition-all shadow-sm hover:shadow flex items-center gap-2 active:scale-95 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700 dark:hover:bg-slate-700 dark:hover:text-white">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
@@ -179,8 +198,15 @@
         </div>
     </header>
     
-    <div class="grid lg:grid-cols-[380px_1fr] h-[calc(100vh-73px)]">
-        <aside class="bg-white/50 backdrop-blur-sm border-r border-slate-200/60 overflow-y-auto h-[calc(100vh-73px)] lg:h-auto dark:bg-slate-900/50 dark:border-slate-700/60">
+    <div id="mainContainer" class="flex flex-col lg:flex-row h-[calc(100vh-73px)] overflow-hidden relative">
+        <aside id="sidebar" class="w-full lg:w-[380px] bg-white/50 backdrop-blur-sm border-slate-200/60 overflow-y-auto transition-all duration-300 z-40 flex flex-col dark:bg-slate-900/50 dark:border-slate-700/60 relative group/sidebar">
+            <!-- Collapse Toggle Button -->
+            <button onclick="toggleSidebar()" id="sidebarToggle" class="absolute top-1/2 -translate-y-1/2 z-50 p-1 bg-white border border-slate-200 rounded-full shadow-md text-slate-500 hover:text-blue-600 hover:border-blue-300 transition-all hidden lg:flex items-center justify-center w-6 h-12 dark:bg-slate-800 dark:border-slate-600 dark:text-slate-400 dark:hover:text-blue-400">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 transition-transform duration-300" id="sidebarToggleIcon">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                </svg>
+            </button>
+
             <!-- Avatar Style Selection -->
             <div class="border-b border-slate-100 p-6 dark:border-slate-800">
                 <h3 class="text-xs font-bold text-slate-400 mb-4 uppercase tracking-wider dark:text-slate-500">Avatar Style</h3>
@@ -363,7 +389,7 @@
             </div>
         </aside>
         
-        <main class="p-8 flex flex-col items-center justify-center bg-slate-50/50 relative overflow-hidden dark:bg-slate-900/50">
+        <main id="mainContent" class="flex-1 p-8 flex flex-col items-center justify-center bg-slate-50/50 relative overflow-hidden dark:bg-slate-900/50 overflow-y-auto">
             <!-- Decorative background elements -->
             <div class="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
                 <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-200/20 rounded-full blur-3xl mix-blend-multiply animate-blob dark:bg-blue-900/20 dark:mix-blend-normal"></div>
@@ -453,6 +479,8 @@
         let currentStyle = 'lorelei';
         let currentConfig = {};
         let debounceTimeout;
+        let layoutPosition = 'right'; // 'left', 'right', 'bottom'
+        let isSidebarCollapsed = false;
         
         // Initialize the editor
         function initEditor() {
@@ -464,7 +492,129 @@
                 initializeConfig();
             }
             
+            // Initialize layout
+            updateLayoutUI();
+            
+            // Handle window resize for responsive layout
+            window.addEventListener('resize', () => {
+                if (window.innerWidth < 1024) {
+                    // Force bottom layout on mobile if not already set
+                    // But we respect user choice if they explicitly set it? 
+                    // The requirement says "in mobile screen bottom dockes s default"
+                    // We'll let CSS handle the default mobile view (flex-col), 
+                    // but our JS logic adds specific classes.
+                    // Let's just ensure the UI reflects the current state or adapts.
+                    updateLayoutUI();
+                }
+            });
+            
             updateAvatar();
+        }
+
+        function setLayout(position) {
+            layoutPosition = position;
+            updateLayoutUI();
+            // Save layout preference? We can add it to saveState if needed, 
+            // but for now let's keep it session-based or add to localStorage separately.
+            localStorage.setItem('basherAvatarEditorLayout', position);
+        }
+        
+        function toggleSidebar() {
+            isSidebarCollapsed = !isSidebarCollapsed;
+            updateLayoutUI();
+        }
+        
+        function updateLayoutUI() {
+            const container = document.getElementById('mainContainer');
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            const toggleBtn = document.getElementById('sidebarToggle');
+            const toggleIcon = document.getElementById('sidebarToggleIcon');
+            
+            // Reset classes
+            container.classList.remove('flex-row', 'flex-row-reverse', 'flex-col', 'flex-col-reverse');
+            sidebar.classList.remove('border-r', 'border-l', 'border-t', 'border-b', 'w-[380px]', 'w-0', 'h-0', 'h-[50vh]', 'order-1', 'order-2');
+            mainContent.classList.remove('order-1', 'order-2');
+            toggleBtn.classList.remove('left-full', 'right-full', '-right-3', '-left-3', 'top-1/2', 'left-1/2', '-translate-y-1/2', '-translate-x-1/2', 'rotate-90', '-rotate-90', 'rotate-180');
+            
+            // Check for mobile
+            const isMobile = window.innerWidth < 1024;
+            
+            // Apply layout based on position
+            if (isMobile || layoutPosition === 'bottom') {
+                // Bottom Layout (Default for Mobile)
+                container.classList.add('flex-col');
+                sidebar.classList.add('order-2', 'border-t', 'w-full');
+                mainContent.classList.add('order-1');
+                
+                // Highlight active button
+                updateLayoutButtons('bottom');
+                
+                // Handle collapse for bottom view
+                if (isSidebarCollapsed) {
+                    sidebar.classList.add('h-12', 'overflow-hidden'); // Minimal height header
+                    toggleIcon.style.transform = 'rotate(-90deg)';
+                } else {
+                    sidebar.classList.add('h-[50vh]');
+                    toggleIcon.style.transform = 'rotate(90deg)';
+                }
+                
+                // Toggle button positioning for bottom layout
+                // For bottom layout, maybe put the toggle button in the center top of the sidebar?
+                toggleBtn.classList.add('left-1/2', '-translate-x-1/2', '-top-3', 'rotate-90');
+                
+            } else {
+                // Desktop Layouts
+                if (layoutPosition === 'left') {
+                    container.classList.add('flex-row');
+                    sidebar.classList.add('order-1', 'border-r');
+                    mainContent.classList.add('order-2');
+                    
+                    toggleBtn.classList.add('-right-3');
+                    
+                    if (isSidebarCollapsed) {
+                        sidebar.classList.add('w-0', 'overflow-hidden', 'p-0', 'border-none');
+                        toggleIcon.style.transform = 'rotate(0deg)'; // Point right to expand
+                    } else {
+                        sidebar.classList.add('w-[380px]');
+                        toggleIcon.style.transform = 'rotate(180deg)'; // Point left to collapse
+                    }
+                    
+                } else { // Right (Default)
+                    container.classList.add('flex-row');
+                    sidebar.classList.add('order-2', 'border-l');
+                    mainContent.classList.add('order-1');
+                    
+                    toggleBtn.classList.add('-left-3');
+                    
+                    if (isSidebarCollapsed) {
+                        sidebar.classList.add('w-0', 'overflow-hidden', 'p-0', 'border-none');
+                        toggleIcon.style.transform = 'rotate(180deg)'; // Point left to expand
+                    } else {
+                        sidebar.classList.add('w-[380px]');
+                        toggleIcon.style.transform = 'rotate(0deg)'; // Point right to collapse
+                    }
+                }
+                
+                // Ensure height is full
+                sidebar.classList.add('h-full');
+                updateLayoutButtons(layoutPosition);
+            }
+        }
+        
+        function updateLayoutButtons(active) {
+            ['left', 'right', 'bottom'].forEach(pos => {
+                const btn = document.getElementById(`btn-layout-${pos}`);
+                if (btn) {
+                    if (pos === active) {
+                        btn.classList.add('bg-white', 'text-blue-600', 'shadow-sm', 'dark:bg-slate-700', 'dark:text-blue-400');
+                        btn.classList.remove('text-slate-500', 'dark:text-slate-400');
+                    } else {
+                        btn.classList.remove('bg-white', 'text-blue-600', 'shadow-sm', 'dark:bg-slate-700', 'dark:text-blue-400');
+                        btn.classList.add('text-slate-500', 'dark:text-slate-400');
+                    }
+                }
+            });
         }
 
         function saveState(config) {
@@ -482,6 +632,12 @@
         }
 
         function loadState() {
+            // Load layout preference
+            const savedLayout = localStorage.getItem('basherAvatarEditorLayout');
+            if (savedLayout) {
+                layoutPosition = savedLayout;
+            }
+            
             const saved = localStorage.getItem('basherAvatarEditorState');
             if (!saved) return false;
             
