@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     fontFamily: {
@@ -16,6 +17,21 @@
             }
         }
     </script>
+    <script>
+        // Check system preference and set dark mode
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        
+        // Listen for changes
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+    </script>
     <style>
         /* Custom animations and utilities for Tailwind */
         @keyframes spin {
@@ -23,8 +39,57 @@
             100% { transform: rotate(360deg); }
         }
         
+        @keyframes blob {
+            0% { transform: translate(0px, 0px) scale(1); }
+            33% { transform: translate(30px, -50px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+            100% { transform: translate(0px, 0px) scale(1); }
+        }
+        
+        .animate-blob {
+            animation: blob 7s infinite;
+        }
+        
+        .animation-delay-2000 {
+            animation-delay: 2s;
+        }
+        
+        .animation-delay-4000 {
+            animation-delay: 4s;
+        }
+        
         .loading {
             animation: spin 1s linear infinite;
+        }
+
+        /* Style Option Styling */
+        .style-option {
+            background-color: white;
+            border-color: #e2e8f0; /* slate-200 */
+            color: #475569; /* slate-600 */
+        }
+        .dark .style-option {
+            background-color: #1e293b; /* slate-800 */
+            border-color: #334155; /* slate-700 */
+            color: #cbd5e1; /* slate-300 */
+        }
+        .style-option:hover {
+            border-color: #cbd5e1; /* slate-300 */
+            color: #1e293b; /* slate-800 */
+        }
+        .dark .style-option:hover {
+            border-color: #475569; /* slate-600 */
+            color: #f8fafc; /* slate-50 */
+        }
+        .style-option.active {
+            background-color: #eff6ff; /* blue-50 */
+            border-color: #3b82f6; /* blue-500 */
+            color: #1d4ed8; /* blue-700 */
+        }
+        .dark .style-option.active {
+            background-color: #1e3a8a; /* blue-900 */
+            border-color: #3b82f6; /* blue-500 */
+            color: #bfdbfe; /* blue-200 */
         }
         
         /* Color picker container styling */
@@ -33,25 +98,80 @@
             align-items: center;
             gap: 0.5rem;
         }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #475569;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .dark ::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+
+        /* Range Slider Styling */
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            background: #3b82f6;
+            cursor: pointer;
+            margin-top: -6px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            transition: transform 0.1s;
+        }
+        input[type=range]::-webkit-slider-thumb:hover {
+            transform: scale(1.1);
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: #e2e8f0;
+            border-radius: 2px;
+        }
+        input[type=range]:focus {
+            outline: none;
+        }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans leading-relaxed">
-    <header class="bg-white border-b border-slate-200 px-8 py-4 flex justify-between items-center sticky top-0 z-50 shadow-sm">
-        <h1 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-blue-500">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128zm0 0a15.998 15.998 0 003.388-1.62m-5.049 12.525a3 3 0 01-2.12-2.12m2.12 2.12a3 3 0 002.12-2.12m-2.12 2.12c.412-.412.833-.833 1.255-1.255m7.555-12.55a3 3 0 00-2.12-2.12m2.12 2.12a3 3 0 012.12-2.12m-2.12 2.12c-.412.412-.833.833-1.255 1.255m-7.555 12.55a3 3 0 01-2.12 2.12m2.12-2.12a3 3 0 002.12 2.12m-2.12-2.12c.412-.412.833-.833 1.255-1.255" />
-            </svg>
-            Basher Avatar Editor
+<body class="bg-slate-50 text-slate-800 font-sans leading-relaxed selection:bg-blue-100 selection:text-blue-700 dark:bg-slate-900 dark:text-slate-100 dark:selection:bg-blue-900 dark:selection:text-blue-100">
+    <header class="bg-white/80 backdrop-blur-md border-b border-slate-200/60 px-8 py-4 flex justify-between items-center sticky top-0 z-50 shadow-sm transition-all duration-300 dark:bg-slate-900/80 dark:border-slate-700/60">
+        <h1 class="text-2xl font-bold text-slate-900 flex items-center gap-2 tracking-tight dark:text-white">
+            <div class="p-2 bg-blue-50 rounded-xl text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128zm0 0a15.998 15.998 0 003.388-1.62m-5.049 12.525a3 3 0 01-2.12-2.12m2.12 2.12a3 3 0 002.12-2.12m-2.12 2.12c.412-.412.833-.833 1.255-1.255m7.555-12.55a3 3 0 00-2.12-2.12m2.12 2.12a3 3 0 012.12-2.12m-2.12 2.12c-.412.412-.833.833-1.255 1.255m-7.555 12.55a3 3 0 01-2.12 2.12m2.12-2.12a3 3 0 002.12 2.12m-2.12-2.12c.412-.412.833-.833 1.255-1.255" />
+                </svg>
+            </div>
+            Basher Editor
         </h1>
-        <div class="flex gap-4">
-            <button onclick="randomizeAvatar()" class="px-4 py-2 bg-slate-100 text-slate-700 border border-slate-200 rounded-lg text-sm font-medium hover:bg-slate-200 transition-all flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+        <div class="flex gap-3">
+            <button onclick="randomizeAvatar()" class="px-4 py-2.5 bg-white text-slate-600 border border-slate-200 rounded-xl text-sm font-semibold hover:bg-slate-50 hover:border-slate-300 hover:text-slate-900 transition-all shadow-sm hover:shadow flex items-center gap-2 active:scale-95 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700 dark:hover:bg-slate-700 dark:hover:text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
                 </svg>
                 Random
             </button>
-            <button onclick="downloadAvatar()" class="px-4 py-2 bg-blue-500 text-white rounded-lg text-sm font-medium hover:bg-blue-600 transition-all flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+            <button onclick="downloadAvatar()" class="px-4 py-2.5 bg-blue-600 text-white rounded-xl text-sm font-semibold hover:bg-blue-700 transition-all shadow-md hover:shadow-lg shadow-blue-500/20 flex items-center gap-2 active:scale-95">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
                 </svg>
                 Download
@@ -59,66 +179,87 @@
         </div>
     </header>
     
-    <div class="grid lg:grid-cols-[400px_1fr] h-[calc(100vh-73px)]">
-        <aside class="bg-white border-r border-slate-200 overflow-y-auto h-[calc(100vh-73px)] lg:h-auto">
+    <div class="grid lg:grid-cols-[380px_1fr] h-[calc(100vh-73px)]">
+        <aside class="bg-white/50 backdrop-blur-sm border-r border-slate-200/60 overflow-y-auto h-[calc(100vh-73px)] lg:h-auto dark:bg-slate-900/50 dark:border-slate-700/60">
             <!-- Avatar Style Selection -->
-            <div class="border-b border-slate-100 p-6">
-                <h3 class="text-sm font-semibold text-gray-600 mb-4 uppercase tracking-wide">Avatar Style</h3>
+            <div class="border-b border-slate-100 p-6 dark:border-slate-800">
+                <h3 class="text-xs font-bold text-slate-400 mb-4 uppercase tracking-wider dark:text-slate-500">Avatar Style</h3>
                 <div class="flex gap-2 mb-4 flex-wrap" id="styleSelector">
-                    <div class="px-4 py-2 border border-slate-200 rounded-lg cursor-pointer text-sm transition-all bg-blue-500 text-white border-blue-500" data-style="lorelei">Lorelei</div>
-
+                    <div class="style-option active px-4 py-2.5 border rounded-xl cursor-pointer text-sm font-medium transition-all shadow-sm hover:shadow-md active:scale-95" data-style="lorelei">Lorelei</div>
                 </div>
             </div>
             
             <!-- Basic Settings -->
-            <div class="border-b border-slate-100 p-6">
-                <h3 class="text-sm font-semibold text-gray-600 mb-4 uppercase tracking-wide">Basic Settings</h3>
+            <div class="border-b border-slate-100 p-6 dark:border-slate-800">
+                <h3 class="text-xs font-bold text-slate-400 mb-4 uppercase tracking-wider dark:text-slate-500">Basic Settings</h3>
                 <div class="space-y-6">
                     <div>
-                        <label class="block text-sm font-medium text-gray-600 mb-2" for="seedInput">Seed</label>
-                        <input type="text" id="seedInput" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-500 focus:ring-3 focus:ring-blue-100" value="custom-avatar" placeholder="Enter seed">
+                        <label class="block text-sm font-medium text-slate-700 mb-2 dark:text-slate-300" for="seedInput">Seed</label>
+                        <div class="relative">
+                            <input type="text" id="seedInput" class="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all shadow-sm dark:bg-slate-800 dark:border-slate-700 dark:text-slate-100 dark:focus:ring-blue-500/20" value="custom-avatar" placeholder="Enter seed">
+                            <div class="absolute right-3 top-2.5 text-slate-400">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                                </svg>
+                            </div>
+                        </div>
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium text-gray-600 mb-2" for="sizeInput">Size</label>
+                        <div class="flex justify-between mb-2">
+                            <label class="text-sm font-medium text-slate-700 dark:text-slate-300" for="sizeInput">Size</label>
+                            <span class="text-xs font-medium text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md dark:bg-slate-800 dark:text-slate-400" id="sizeValue">200px</span>
+                        </div>
                         <input type="range" id="sizeInput" class="w-full my-2" min="50" max="500" value="200">
-                        <span class="inline-block bg-slate-100 px-2 py-1 rounded text-xs font-medium text-slate-600 ml-2" id="sizeValue">200px</span>
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium text-gray-600 mb-2" for="scaleInput">Scale</label>
+                        <div class="flex justify-between mb-2">
+                            <label class="text-sm font-medium text-slate-700 dark:text-slate-300" for="scaleInput">Scale</label>
+                            <span class="text-xs font-medium text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md dark:bg-slate-800 dark:text-slate-400" id="scaleValue">100%</span>
+                        </div>
                         <input type="range" id="scaleInput" class="w-full my-2" min="50" max="200" value="100">
-                        <span class="inline-block bg-slate-100 px-2 py-1 rounded text-xs font-medium text-slate-600 ml-2" id="scaleValue">100%</span>
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium text-gray-600 mb-2" for="rotateInput">Rotate</label>
+                        <div class="flex justify-between mb-2">
+                            <label class="text-sm font-medium text-slate-700 dark:text-slate-300" for="rotateInput">Rotate</label>
+                            <span class="text-xs font-medium text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md dark:bg-slate-800 dark:text-slate-400" id="rotateValue">0°</span>
+                        </div>
                         <input type="range" id="rotateInput" class="w-full my-2" min="0" max="360" value="0">
-                        <span class="inline-block bg-slate-100 px-2 py-1 rounded text-xs font-medium text-slate-600 ml-2" id="rotateValue">0°</span>
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium text-gray-600 mb-2" for="radiusInput">Border Radius</label>
+                        <div class="flex justify-between mb-2">
+                            <label class="text-sm font-medium text-slate-700 dark:text-slate-300" for="radiusInput">Border Radius</label>
+                            <span class="text-xs font-medium text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md dark:bg-slate-800 dark:text-slate-400" id="radiusValue">0%</span>
+                        </div>
                         <input type="range" id="radiusInput" class="w-full my-2" min="0" max="50" value="0">
-                        <span class="inline-block bg-slate-100 px-2 py-1 rounded text-xs font-medium text-slate-600 ml-2" id="radiusValue">0%</span>
                     </div>
                 </div>
             </div>
             
             <!-- Background -->
-            <div class="border-b border-slate-100 p-6">
-                <h3 class="text-sm font-semibold text-gray-600 mb-4 uppercase tracking-wide">Background</h3>
+            <div class="border-b border-slate-100 p-6 dark:border-slate-800">
+                <h3 class="text-xs font-bold text-slate-400 mb-4 uppercase tracking-wider dark:text-slate-500">Background</h3>
                 <div class="space-y-6">
                     <div>
-                        <label class="block text-sm font-medium text-gray-600 mb-2">Background Type</label>
-                        <select id="backgroundType" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-500 focus:ring-3 focus:ring-blue-100">
-                            <option value="solid">Solid</option>
-                            <option value="gradientLinear">Gradient</option>
-                        </select>
+                        <label class="block text-sm font-medium text-slate-700 mb-2 dark:text-slate-300">Background Type</label>
+                        <div class="relative">
+                            <select id="backgroundType" class="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all shadow-sm appearance-none dark:bg-slate-800 dark:border-slate-700 dark:text-slate-100">
+                                <option value="solid">Solid Color</option>
+                                <option value="gradientLinear">Linear Gradient</option>
+                            </select>
+                            <div class="absolute right-3 top-3 text-slate-400 pointer-events-none">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                </svg>
+                            </div>
+                        </div>
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium text-gray-600 mb-3">Background Colors</label>
+                        <label class="block text-sm font-medium text-slate-700 mb-3">Background Colors</label>
                         <div class="space-y-1" id="backgroundColors">
                             <!-- Colors will be populated by JavaScript -->
                         </div>
@@ -222,42 +363,56 @@
             </div>
         </aside>
         
-        <main class="p-8 flex flex-col items-center justify-center bg-white ">
-            <div class="bg-slate-50 border border-slate-200 rounded-2xl p-8 mb-8 flex items-center justify-center min-h-[300px]">
-                <img id="avatarImage" src="" alt="Avatar Preview" class=" rounded-2xl shadow-xl hidden">
-                <div id="loadingIndicator" class="w-5 h-5 border-2 border-gray-200 border-t-2 border-t-blue-500 rounded-full loading"></div>
+        <main class="p-8 flex flex-col items-center justify-center bg-slate-50/50 relative overflow-hidden dark:bg-slate-900/50">
+            <!-- Decorative background elements -->
+            <div class="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
+                <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-200/20 rounded-full blur-3xl mix-blend-multiply animate-blob dark:bg-blue-900/20 dark:mix-blend-normal"></div>
+                <div class="absolute top-1/3 right-1/4 w-96 h-96 bg-purple-200/20 rounded-full blur-3xl mix-blend-multiply animate-blob animation-delay-2000 dark:bg-purple-900/20 dark:mix-blend-normal"></div>
+                <div class="absolute bottom-1/4 left-1/3 w-96 h-96 bg-pink-200/20 rounded-full blur-3xl mix-blend-multiply animate-blob animation-delay-4000 dark:bg-pink-900/20 dark:mix-blend-normal"></div>
+            </div>
+
+            <div class="bg-white/80 backdrop-blur-xl border border-white/50 rounded-3xl p-12 mb-8 flex items-center justify-center min-h-[400px] min-w-[400px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] relative z-10 transition-all hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] dark:bg-slate-800/80 dark:border-slate-700/50 dark:shadow-[0_8px_30px_rgb(0,0,0,0.2)]">
+                <img id="avatarImage" src="" alt="Avatar Preview" class="rounded-2xl drop-shadow-2xl hidden transition-all duration-500 hover:scale-105">
+                <div id="loadingIndicator" class="w-8 h-8 border-4 border-blue-100 border-t-4 border-t-blue-500 rounded-full loading dark:border-slate-700 dark:border-t-blue-500"></div>
             </div>
             
-            <div class="flex gap-4 flex-wrap justify-center">
-                <button onclick="copyToClipboard()" class="px-4 py-2 bg-slate-100 text-slate-700 border border-slate-200 rounded-lg text-sm font-medium hover:bg-slate-200 transition-all flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+            <div class="flex gap-3 flex-wrap justify-center relative z-10">
+                <button onclick="copyToClipboard()" class="px-5 py-2.5 bg-white text-slate-600 border border-slate-200 rounded-xl text-sm font-semibold hover:bg-slate-50 hover:text-slate-900 transition-all shadow-sm hover:shadow flex items-center gap-2 active:scale-95 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700 dark:hover:bg-slate-700 dark:hover:text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15.666 3.888A2.25 2.25 0 0013.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 01-.75.75H9a.75.75 0 01-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 01-2.25 2.25H6.75A2.25 2.25 0 014.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 011.927-.184" />
                     </svg>
                     Copy URL
                 </button>
-                <button onclick="downloadSVG()" class="px-4 py-2 bg-slate-100 text-slate-700 border border-slate-200 rounded-lg text-sm font-medium hover:bg-slate-200 transition-all flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                <button onclick="downloadSVG()" class="px-5 py-2.5 bg-white text-slate-600 border border-slate-200 rounded-xl text-sm font-semibold hover:bg-slate-50 hover:text-slate-900 transition-all shadow-sm hover:shadow flex items-center gap-2 active:scale-95 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700 dark:hover:bg-slate-700 dark:hover:text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5" />
                     </svg>
                     SVG
                 </button>
-                <button onclick="downloadPNG()" class="px-4 py-2 bg-slate-100 text-slate-700 border border-slate-200 rounded-lg text-sm font-medium hover:bg-slate-200 transition-all flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                <button onclick="downloadPNG()" class="px-5 py-2.5 bg-white text-slate-600 border border-slate-200 rounded-xl text-sm font-semibold hover:bg-slate-50 hover:text-slate-900 transition-all shadow-sm hover:shadow flex items-center gap-2 active:scale-95 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700 dark:hover:bg-slate-700 dark:hover:text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a2.25 2.25 0 002.25-2.25V6a2.25 2.25 0 00-2.25-2.25H3.75A2.25 2.25 0 001.5 6v12a2.25 2.25 0 002.25 2.25z" />
                     </svg>
                     PNG
                 </button>
-                <button onclick="generateNewSeed()" class="px-4 py-2 bg-blue-500 text-white rounded-lg text-sm font-medium hover:bg-blue-600 transition-all flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                <button onclick="generateNewSeed()" class="px-5 py-2.5 bg-slate-900 text-white rounded-xl text-sm font-semibold hover:bg-slate-800 transition-all shadow-lg shadow-slate-900/20 flex items-center gap-2 active:scale-95 dark:bg-blue-600 dark:hover:bg-blue-700 dark:shadow-blue-900/20">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
                     </svg>
                     New Avatar
                 </button>
             </div>
             
-            <div class="bg-slate-100 border border-slate-200 rounded-lg p-4 mt-8 w-full max-w-2xl">
-                <label for="avatarUrl" class="text-sm font-medium text-gray-600 block mb-2">Avatar URL:</label>
-                <input type="text" id="avatarUrl" readonly class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm font-mono bg-white">
+            <div class="bg-white/50 backdrop-blur-sm border border-slate-200 rounded-xl p-4 mt-8 w-full max-w-2xl relative z-10 dark:bg-slate-800/50 dark:border-slate-700">
+                <label for="avatarUrl" class="text-xs font-bold text-slate-400 block mb-2 uppercase tracking-wider dark:text-slate-500">Avatar URL</label>
+                <div class="relative">
+                    <input type="text" id="avatarUrl" readonly class="w-full pl-4 pr-10 py-2.5 border border-slate-200 rounded-lg text-sm font-mono bg-white text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:bg-slate-900 dark:border-slate-700 dark:text-slate-300 dark:focus:ring-blue-500/20">
+                    <div class="absolute right-3 top-2.5 text-slate-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244" />
+                        </svg>
+                    </div>
+                </div>
             </div>
         </main>
     </div>
@@ -385,10 +540,10 @@
                             if (container) {
                                 const radioContainer = container.querySelector('.grid');
                                 if (radioContainer) {
-                                    radioContainer.querySelectorAll('div').forEach(div => {
-                                        div.classList.remove('bg-blue-50', 'border-blue-500');
+                                    radioContainer.querySelectorAll('.group').forEach(div => {
+                                        div.classList.remove('ring-2', 'ring-blue-500', 'ring-offset-2', 'border-blue-500', 'bg-blue-50/50', 'dark:bg-blue-900/20', 'dark:border-blue-500', 'dark:ring-offset-slate-900');
                                     });
-                                    radio.parentElement.classList.add('bg-blue-50', 'border-blue-500');
+                                    radio.parentElement.classList.add('ring-2', 'ring-blue-500', 'ring-offset-2', 'border-blue-500', 'bg-blue-50/50', 'dark:bg-blue-900/20', 'dark:border-blue-500', 'dark:ring-offset-slate-900');
                                 }
                             }
                         }
@@ -402,7 +557,10 @@
                         const container = document.getElementById(key + 's');
                         if (container) {
                             const pickers = container.querySelectorAll('.color-picker');
-                            pickers.forEach(p => p.classList.remove('ring-2', 'ring-blue-500', 'ring-offset-2'));
+                            pickers.forEach(p => {
+                                const firstDiv = p.querySelector('div:first-child');
+                                if (firstDiv) firstDiv.classList.remove('ring-2', 'ring-blue-500', 'ring-offset-2', 'dark:ring-offset-slate-900');
+                            });
                             
                             // Try to find matching preset
                             let found = false;
@@ -412,11 +570,11 @@
                                     const style = colorDiv.getAttribute('style');
                                     const match = style.match(/#([0-9a-f]{6})/i);
                                     if (match && match[1].toLowerCase() === colorVal.toLowerCase()) {
-                                        p.classList.add('ring-2', 'ring-blue-500', 'ring-offset-2');
+                                        p.querySelector('div:first-child').classList.add('ring-2', 'ring-blue-500', 'ring-offset-2', 'dark:ring-offset-slate-900');
                                         found = true;
                                     }
                                 } else if (colorVal === 'transparent' && p.textContent.includes('transparent')) {
-                                    p.classList.add('ring-2', 'ring-blue-500', 'ring-offset-2');
+                                    p.querySelector('div:first-child').classList.add('ring-2', 'ring-blue-500', 'ring-offset-2', 'dark:ring-offset-slate-900');
                                     found = true;
                                 }
                             });
@@ -541,31 +699,38 @@
             
             // Add header
             const header = document.createElement('div');
-            header.className = 'flex justify-between items-center mb-2';
+            header.className = 'flex justify-between items-center mb-3';
             header.innerHTML = `
-                <span class="text-xs text-gray-500">${options.length} options</span>
+                <span class="text-xs font-medium text-slate-400 uppercase tracking-wider dark:text-slate-500">${options.length} options</span>
             `;
             container.appendChild(header);
             
             // Add radio container
             const radioContainer = document.createElement('div');
-            radioContainer.className = 'grid grid-cols-[repeat(auto-fit,minmax(100px,1fr))] gap-2 max-h-[200px] overflow-y-auto border border-slate-200 rounded-lg p-2';
+            radioContainer.className = 'grid grid-cols-[repeat(auto-fit,minmax(100px,1fr))] gap-3 max-h-[240px] overflow-y-auto pr-2';
             
             // Add "None" option
             const noneItem = document.createElement('div');
-            noneItem.className = 'flex items-center gap-2 p-2 border border-slate-200 rounded cursor-pointer transition-all text-xs hover:bg-slate-50';
+            noneItem.className = 'group relative flex items-center justify-center p-3 border border-slate-200 rounded-xl cursor-pointer transition-all hover:border-blue-400 hover:shadow-md bg-white dark:bg-slate-800 dark:border-slate-700 dark:hover:border-blue-500';
             noneItem.innerHTML = `
-                <input type="radio" name="${configKey}" id="${configKey}_none" value="" class="m-0">
-                <label for="${configKey}_none" class="cursor-pointer">None</label>
+                <input type="radio" name="${configKey}" id="${configKey}_none" value="" class="absolute inset-0 opacity-0 cursor-pointer">
+                <div class="flex flex-col items-center gap-2">
+                    <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 group-hover:bg-blue-50 group-hover:text-blue-500 transition-colors dark:bg-slate-700 dark:text-slate-500 dark:group-hover:bg-blue-900/30 dark:group-hover:text-blue-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                        </svg>
+                    </div>
+                    <span class="text-xs font-medium text-slate-600 group-hover:text-slate-900 dark:text-slate-400 dark:group-hover:text-slate-200">None</span>
+                </div>
             `;
             const noneRadio = noneItem.querySelector('input');
             noneRadio.addEventListener('change', () => {
                 // Uncheck all others visually
-                radioContainer.querySelectorAll('div').forEach(div => {
-                    div.classList.remove('bg-blue-50', 'border-blue-500');
+                radioContainer.querySelectorAll('.group').forEach(div => {
+                    div.classList.remove('ring-2', 'ring-blue-500', 'ring-offset-2', 'border-blue-500', 'bg-blue-50/50', 'dark:bg-blue-900/20', 'dark:border-blue-500', 'dark:ring-offset-slate-900');
                 });
                 if (noneRadio.checked) {
-                    noneItem.classList.add('bg-blue-50', 'border-blue-500');
+                    noneItem.classList.add('ring-2', 'ring-blue-500', 'ring-offset-2', 'border-blue-500', 'bg-blue-50/50', 'dark:bg-blue-900/20', 'dark:border-blue-500', 'dark:ring-offset-slate-900');
                 }
                 debounceUpdate();
             });
@@ -573,20 +738,25 @@
 
             options.forEach(option => {
                 const item = document.createElement('div');
-                item.className = 'flex items-center gap-2 p-2 border border-slate-200 rounded cursor-pointer transition-all text-xs hover:bg-slate-50';
+                item.className = 'group relative flex items-center justify-center p-3 border border-slate-200 rounded-xl cursor-pointer transition-all hover:border-blue-400 hover:shadow-md bg-white dark:bg-slate-800 dark:border-slate-700 dark:hover:border-blue-500';
                 item.innerHTML = `
-                    <input type="radio" name="${configKey}" id="${configKey}_${option}" value="${option}" class="m-0">
-                    <label for="${configKey}_${option}" class="cursor-pointer">${option}</label>
+                    <input type="radio" name="${configKey}" id="${configKey}_${option}" value="${option}" class="absolute inset-0 opacity-0 cursor-pointer">
+                    <div class="flex flex-col items-center gap-2">
+                        <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 font-mono text-[10px] group-hover:bg-blue-50 group-hover:text-blue-600 transition-colors dark:bg-slate-700 dark:text-slate-400 dark:group-hover:bg-blue-900/30 dark:group-hover:text-blue-400">
+                            ${option.replace('variant', '')}
+                        </div>
+                        <span class="text-[10px] font-medium text-slate-500 group-hover:text-slate-900 truncate w-full text-center dark:text-slate-400 dark:group-hover:text-slate-200">${option}</span>
+                    </div>
                 `;
                 
                 const radio = item.querySelector('input');
                 radio.addEventListener('change', () => {
                     // Uncheck all others visually
-                    radioContainer.querySelectorAll('div').forEach(div => {
-                        div.classList.remove('bg-blue-50', 'border-blue-500');
+                    radioContainer.querySelectorAll('.group').forEach(div => {
+                        div.classList.remove('ring-2', 'ring-blue-500', 'ring-offset-2', 'border-blue-500', 'bg-blue-50/50', 'dark:bg-blue-900/20', 'dark:border-blue-500', 'dark:ring-offset-slate-900');
                     });
                     if (radio.checked) {
-                        item.classList.add('bg-blue-50', 'border-blue-500');
+                        item.classList.add('ring-2', 'ring-blue-500', 'ring-offset-2', 'border-blue-500', 'bg-blue-50/50', 'dark:bg-blue-900/20', 'dark:border-blue-500', 'dark:ring-offset-slate-900');
                     }
                     debounceUpdate();
                 });
@@ -605,13 +775,18 @@
             
             // Add custom color input at the top
             const customColorDiv = document.createElement('div');
-            customColorDiv.className = 'mb-3 p-3 border border-slate-200 rounded-lg bg-slate-50';
+            customColorDiv.className = 'mb-4 p-4 border border-slate-200 rounded-xl bg-white shadow-sm dark:bg-slate-800 dark:border-slate-700';
             customColorDiv.innerHTML = `
-                <label class="block text-sm font-medium text-gray-700 mb-2">Custom Color</label>
-                <div class="flex gap-2 items-center">
-                    <input type="color" id="${configKey}_custom_picker" class="w-12 h-10 border border-slate-300 rounded cursor-pointer">
-                    <input type="text" id="${configKey}_custom_text" placeholder="#000000" class="flex-1 px-3 py-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-mono text-sm">
-                    <button onclick="applyCustomColor('${configKey}')" class="px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors text-sm">Apply</button>
+                <label class="block text-xs font-bold text-slate-400 mb-3 uppercase tracking-wider dark:text-slate-500">Custom Color</label>
+                <div class="flex gap-3 items-center">
+                    <div class="relative w-12 h-12 rounded-full overflow-hidden shadow-inner ring-1 ring-slate-200 dark:ring-slate-600">
+                        <input type="color" id="${configKey}_custom_picker" class="absolute -top-2 -left-2 w-16 h-16 cursor-pointer p-0 border-0">
+                    </div>
+                    <div class="flex-1 relative">
+                        <span class="absolute left-3 top-2.5 text-slate-400 font-mono text-sm">#</span>
+                        <input type="text" id="${configKey}_custom_text" placeholder="000000" class="w-full pl-7 pr-3 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-mono text-sm bg-slate-50 focus:bg-white transition-all dark:bg-slate-900 dark:border-slate-700 dark:text-slate-100 dark:focus:bg-slate-800">
+                    </div>
+                    <button onclick="applyCustomColor('${configKey}')" class="px-4 py-2.5 bg-slate-900 text-white rounded-lg hover:bg-slate-800 transition-all text-sm font-medium shadow-md hover:shadow-lg active:scale-95 dark:bg-blue-600 dark:hover:bg-blue-700">Apply</button>
                 </div>
             `;
             
@@ -620,14 +795,13 @@
             const customText = customColorDiv.querySelector(`#${configKey}_custom_text`);
             
             customPicker.addEventListener('input', () => {
-                customText.value = customPicker.value;
+                customText.value = customPicker.value.replace('#', '');
             });
             
             customText.addEventListener('input', () => {
                 let value = customText.value;
-                if (value.match(/^#?[0-9a-f]{6}$/i)) {
-                    if (!value.startsWith('#')) value = '#' + value;
-                    customPicker.value = value;
+                if (value.match(/^[0-9a-f]{6}$/i)) {
+                    customPicker.value = '#' + value;
                 }
             });
             
@@ -635,14 +809,14 @@
             
             // Add preset colors section
             const presetDiv = document.createElement('div');
-            presetDiv.innerHTML = `<label class="block text-sm font-medium text-gray-700 mb-3">Preset Colors</label>`;
+            presetDiv.innerHTML = `<label class="block text-xs font-bold text-slate-400 mb-3 uppercase tracking-wider dark:text-slate-500">Preset Colors</label>`;
             
             const colorGrid = document.createElement('div');
-            colorGrid.className = 'grid grid-cols-4 gap-3 max-h-[240px] overflow-y-auto';
+            colorGrid.className = 'grid grid-cols-5 gap-3 max-h-[240px] overflow-y-auto pr-2';
             
             colors.forEach((color, index) => {
                 const picker = document.createElement('div');
-                picker.className = 'color-picker flex flex-col items-center cursor-pointer transition-all hover:scale-105 p-2 rounded-lg hover:bg-slate-100';
+                picker.className = 'color-picker group relative flex flex-col items-center cursor-pointer transition-all hover:scale-110';
                 
                 // Convert color name to hex for display
                 let hexColor = color;
@@ -653,30 +827,30 @@
                 }
                 
                 picker.innerHTML = `
-                    <div class="w-12 h-12 border-2 border-slate-300 rounded-lg overflow-hidden relative group mb-2 flex-shrink-0">
+                    <div class="w-10 h-10 rounded-full overflow-hidden relative shadow-sm ring-1 ring-slate-200 group-hover:shadow-md transition-all dark:ring-slate-600">
                         ${color === 'transparent' ? 
                             '<div class="w-full h-full bg-white" style="background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%); background-size: 6px 6px; background-position: 0 0, 0 3px, 3px -3px, -3px 0px;"></div>' :
                             `<div class="w-full h-full" style="background-color: #${hexColor}"></div>`
                         }
-                        <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all rounded-lg"></div>
+                        <div class="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-all"></div>
                     </div>
-                    <div class="text-[10px] text-center font-mono text-gray-600 leading-tight break-all w-full">
-                        ${color === 'transparent' ? 'transparent' : `#${hexColor}`}
+                    <div class="absolute -bottom-6 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10">
+                        ${color === 'transparent' ? 'Transparent' : `#${hexColor}`}
                     </div>
                 `;
                 
                 picker.addEventListener('click', () => {
-                    document.querySelectorAll(`#${containerId} .color-picker`).forEach(p => {
-                        p.classList.remove('ring-2', 'ring-blue-500', 'ring-offset-2');
+                    document.querySelectorAll(`#${containerId} .color-picker div:first-child`).forEach(p => {
+                        p.classList.remove('ring-2', 'ring-blue-500', 'ring-offset-2', 'dark:ring-offset-slate-900');
                     });
-                    picker.classList.add('ring-2', 'ring-blue-500', 'ring-offset-2');
+                    picker.querySelector('div:first-child').classList.add('ring-2', 'ring-blue-500', 'ring-offset-2', 'dark:ring-offset-slate-900');
                     currentConfig[configKey] = color;
                     debounceUpdate();
                 });
                 
                 // Select first color by default for most properties, transparent for backgroundColor
                 if (index === 0 || (configKey === 'backgroundColor' && color === 'transparent')) {
-                    picker.classList.add('ring-2', 'ring-blue-500', 'ring-offset-2');
+                    picker.querySelector('div:first-child').classList.add('ring-2', 'ring-blue-500', 'ring-offset-2', 'dark:ring-offset-slate-900');
                 }
                 
                 colorGrid.appendChild(picker);
@@ -699,8 +873,8 @@
                 // Clear other selections
                 const container = document.getElementById(configKey + 'Colors');
                 if (container) {
-                    container.querySelectorAll('.color-picker').forEach(p => {
-                        p.classList.remove('ring-2', 'ring-blue-500', 'ring-offset-2');
+                    container.querySelectorAll('.color-picker div:first-child').forEach(p => {
+                        p.classList.remove('ring-2', 'ring-blue-500', 'ring-offset-2', 'dark:ring-offset-slate-900');
                     });
                 }
                 
